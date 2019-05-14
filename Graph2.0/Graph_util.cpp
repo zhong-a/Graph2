@@ -5,7 +5,7 @@
 //  Created by Alan Zhong on 5/11/19.
 //  Copyright © 2019 Alan Zhong. All rights reserved.
 //
-
+#include <iostream>
 #include <vector>
 
 #include "Graph_util.hpp"
@@ -18,10 +18,10 @@ Edge::Edge() {
     weight = 0;
 }
 
-Edge::Edge(int d, int s, int w) {
-    destination = d;
-    source = s;
-    weight = 0;
+Edge::Edge(int s, int d, float w) {
+    destination = d - 1;
+    source = s - 1;
+    weight = w;
 }
 
 bool Compare::operator()(pp first, pp second) {
@@ -39,6 +39,7 @@ void Neighborhood::resize(int size) {
 }
 
 void Neighborhood::addDirectedEdge(const Edge& e) {
+    //std::cout << e.source << " " << e.destination << " " << e.weight << std::endl;
     nodes[e.destination] = e.weight;
 }
 
@@ -48,4 +49,19 @@ void Neighborhood::addUndirectedEdge(const Edge& e) {
 
 int Neighborhood::at(int index) {
     return nodes[index];
+}
+
+void Neighborhood::printNodes() {
+    for (int i = 0; i < numNodes; i++){
+        if (nodes[i]!= 0) {
+            std::cout << i << std::endl;
+        }
+    }
+}
+
+bool Neighborhood::isPath(int dest) {
+    if (nodes[dest] == 0) {
+        return false;
+    }
+    return true;
 }
