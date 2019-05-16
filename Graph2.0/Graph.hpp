@@ -13,16 +13,11 @@
 
 struct Graph {
     size_t numNodes; //number of Nodes
-    std::vector<Neighborhood> city;
-    std::vector<float> distances;
-    std::vector<bool> visited;
-    std::vector<int> foundPaths;
+    std::vector<Neighborhood> city; //adjacency list of nodes in graph. No path between two nodes is denoted as 0.
+    std::vector<float> distances; //keeps track of minimum distances to each node, needs to be reset each dijkstra
+    std::vector<bool> visited; //keeps track of visited nodes
     
     Graph(const std::vector<Edge>&, int);
-    //void addEdge(Edge&);
-    //BFS() input is the starting vector
-    //void bfs();
-    //void dfs();
     int dijkstra(int, int);
     void dijkstraUtil(std::priority_queue<pp, std::vector<pp>, Compare>&);
     void clear();
@@ -30,7 +25,8 @@ struct Graph {
     int dijkstra2(int, int);
     void adjustDistances(int, std::unordered_map<int, float>&, Neighborhood&);
     
-    int dijkstra3(int, int);
+    int dijkstra3(int, int); //working version of Dijkstra Algorithm
+    
     void adjustDistances3(int, std::unordered_map<int, float>&, Neighborhood&);
 };
 

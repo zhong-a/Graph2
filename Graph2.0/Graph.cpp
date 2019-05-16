@@ -26,6 +26,9 @@ Graph::Graph(const std::vector<Edge>& edges, int n) {
     visited.resize(numNodes);
 }
 
+//resize distances vector and visited vector to numNodes
+//distances default value for all nodes is infinity (except start node for Dijkstra, set to 0)
+// visited for all to false, except for starting node which is set to true in Dijkstra3
 void Graph::clear() {
     distances.resize(numNodes);
     for (int i = 0; i < numNodes; i++) {
@@ -57,12 +60,8 @@ void Graph::dijkstraUtil(std::priority_queue<pp, std::vector<pp>, Compare>& pq) 
                     distances[curr.first] = distances[curr.first] + city[curr.first].at(i);
                 }
             }
-            /*if (!visited[curr.first]) {
-                newPair.second = city[curr.first].at(i);
-                newPair.first = i;
-                pq.push(newPair);
-            */}
         }
+    }
     visited[curr.first] = true;
 }
 
@@ -154,12 +153,18 @@ void Graph::adjustDistances(int curr, std::unordered_map<int, float>& map, Neigh
     map.erase(map[curr]);
 }
 
+//inputs: startnode, endnode. Both start and end begin indexing at 1
+//from start, look for paths to all neighboring nodes, comparing (distance to currentNode + distance to next neighbor) to the current distance to next neighbor, if new distance is lower, adjust distances vector for that node
+//After checking all neighbors of a node, pick a new node with lowest distance from map of unvisited nodes
+//uses unordered_map to store unvisited nodes, when a node's neighbors have all been considered, that node is "visited" and is removed from the unordered_map
+//use function adjustDistances3 to consider neighbors and remove node from unvisited
+//algorithm ends when: there are no more unvisited nodes, or the endNode has been visited
 int Graph::dijkstra3(int start, int end) {
     clear();
     int startNode = start - 1;
     int endNode = end - 1;
     std::unordered_map<int, float> map;
-    for (int i = 0; i < numNodes; i ++) { //load up the map with all the nodes
+    for (int i = 0; i < numNodes; i ++) { //load up the map of unvisited nodes with all the nodes
         if (i == startNode) {
             continue;
         }
@@ -178,18 +183,8 @@ int Graph::dijkstra3(int start, int end) {
                 currentMin = it->second;
             }
         }
-       // if (currentMin != std::numeric_limits<double>::infinity()) {
-            /* if (map[minNode] == INT_MAX) { // no path
-             std::cout << "No Path Found" << std::endl;
-             return 0;
-             }*/
             std:: cout << "Checking Node " << minNode << std::endl;
             adjustDistances3(minNode, map, city[minNode]);
-        //}
-        /*else {
-            std::cout << "No Path Found" << std::endl;
-            return 0;
-        }*/
     }
     return distances[endNode];
 }
@@ -210,6 +205,6 @@ void Graph::adjustDistances3(int curr, std::unordered_map<int, float>& map, Neig
             }
         }
     }
-    map.erase(map.find(curr));
+    map.erase(map.find(curr)); //remove visited node from the map of unvisited nodes
     visited[curr] = true;
 }
