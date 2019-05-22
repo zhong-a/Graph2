@@ -11,6 +11,7 @@
 
 #include "Graph_util.hpp"
 
+
 struct Graph {
     size_t numNodes; //number of Nodes
     std::vector<Neighborhood> city; //adjacency list of nodes in graph. No path between two nodes is denoted as 0.
